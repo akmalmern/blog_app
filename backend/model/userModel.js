@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
+const bcrypt = require("bcrypt")
 
-
-const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+// const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 const userSchema = mongoose.Schema({
     name:{
         type:String,
@@ -24,14 +24,25 @@ const userSchema = mongoose.Schema({
         type:String,
         trim:true,
         required:[true,"parolingizni kiritishingiz kerak..."],
-        
-        match: [passwordRegex, 'Parol kamida bitta katta harf, bitta raqam va bitta maxsus belgi (@$!%*?&) bo\'lishi kerak.'],
+        match: [/^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]+$/,
+            'Parolda kamida 1 ta katta harf, 1 ta kichik harf, 1 ta raqam va maxsus belgi boʻ\lishi kerak.'
+        ],
     },
+    isVerified: { type: Boolean, default: false },
+    otp: { type: String },
+    otpExpire: { type: Date },
     role:{
         type:String,
         default:"user"
     }
 },{timestamps:true})
+//encrypting password before saving
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) {
+        next();
+    }
+    this.password = await bcrypt.hash(this.password, 10)
+})
 
 
 const userModel = mongoose.model("userModel", userSchema)
