@@ -83,10 +83,10 @@ const signIn = async (req,res,next) =>{
 
 const sendTokenResponse = async (user, codeStatus, res) => {
     const token = jwt.sign({id: user._id}, process.env.JWT_SECRET,{
-        expiresIn:"1d"
+        expiresIn:"1h"
     })
     console.log(token)
-    const options = {maxAge: 60 * 60 * 1000, httpOnly: true}
+    const options = {maxAge: 60 * 60 *  1000, httpOnly: true,sameSite: 'Strict'}
    
     res
         .status(codeStatus)

@@ -8,7 +8,7 @@ const DB = require("./db/db")
 
 // routes
 const userRouter = require("./routes/userRoutes")
-
+const blogRouter = require("./routes/postRoutes")
 
 const errorHandler = require("./middlware/error")
 
@@ -22,8 +22,8 @@ app.use(cookieParser())
 
 
 // routes
-app.use("/", userRouter)
-
+app.use("/", userRouter);
+app.use("/", blogRouter);
 
 // 
 app.use(errorHandler)
