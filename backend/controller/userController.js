@@ -1,141 +1,118 @@
-const ErrorResponse = require("../utils/errorResponse")
-const userModel = require("../model/userModel")
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
-const nodemailer = require('nodemailer');
+const ErrorResponse = require("../utils/errorResponse");
+const userModel = require("../model/userModel");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+// const nodemailer = require("nodemailer");
 
+const signUp = async (req, res, next) => {
+  const { email, password, name } = req.body;
+  const userExist = await userModel.findOne({ email });
+  if (userExist) {
+    return next(new ErrorResponse("Bu email royxatdan otgan", 400));
+  }
+  if (!name || !email || !password) {
+    return next(new ErrorResponse("maydonni toliq toldiring", 400));
+  }
+  if (password.length < 4) {
+    return next(
+      new ErrorResponse("kamida 4 ta belgidan iborat bolish kk", 400)
+    );
+  }
 
-
-const signUp = async (req,res,next) =>{
-    const {email,password,name} = req.body;
-    const userExist = await userModel.findOne({email})
-    if(userExist){
-        return next(new ErrorResponse("Bu email royxatdan otgan", 400))
+  try {
+    const user = await userModel.create(req.body);
+    res.status(201).json({
+      success: true,
+      message: "royxatdan otdingiz",
+      user,
+    });
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      // Validatsiya xatoliklarini foydalanuvchiga aniq ko'rsatish
+      next(
+        new ErrorResponse(error.errors.password?.message || "Yaroqsiz ma'lumot")
+      );
     }
-    if(!name || !email || !password){
-        return next(new ErrorResponse("maydonni toliq toldiring", 400))
+
+    next(new ErrorResponse(error.message, 500));
+  }
+};
+
+const signIn = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return next(new ErrorResponse("Maydonni to/'liq to/'ldiring", 400));
     }
-    if(password.length <4){
-        return next(new ErrorResponse("kamida 4 ta belgidan iborat bolish kk", 400))
+
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return next(new ErrorResponse("Bu odam tzimda yuq", 404));
     }
 
-    try {
-        const user = await userModel.create(req.body)
-        res.status(201).json({
-            success: true,
-            message:"royxatdan otdingiz",
-            user
-        })
-        
-    } catch (error) {
-  
-        if (error.name === 'ValidationError') {
-            // Validatsiya xatoliklarini foydalanuvchiga aniq ko'rsatish
-            return res.status(400).json({ 
-              success: false,
-              message: error.errors.password?.message || 'Yaroqsiz ma\'lumot',
-            });
-          }
-         
-
-        res.status(500).json({
-            success: false,
-            message:"signun api dan xatolik",
-            error: error.message
-        })
-       
-        
+    // parolni tekshirish
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return next(new ErrorResponse("parol xato"), 401);
     }
-}
 
-const signIn = async (req,res,next) =>{
-    try {
-        const {email, password} = req.body;
-        if(!email || !password){
-            return next(new ErrorResponse("Maydonni to/'liq to/'ldiring", 400))
-        }
-
-        const user = await userModel.findOne({email})
-        if(!user){
-            return next(new ErrorResponse("Bu odam tzimda yuq", 404))
-        }
-
-        // parolni tekshirish
-        const isMatch = await bcrypt.compare(password, user.password)
-        if(!isMatch){
-            return next(new ErrorResponse("parol xato"), 401)
-        }
-
-
-        // token
-        sendTokenResponse(user, 200, res);
-        res.status()
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({
-            success: false,
-            message:"signin api dan xatolik",
-            error: error.message
-        })
-        
-    }
-}
+    // token
+    sendTokenResponse(user, 200, res);
+    res.status();
+  } catch (error) {
+    console.log(error.message);
+    next(new ErrorResponse(error.message, 500));
+  }
+};
 
 const sendTokenResponse = async (user, codeStatus, res) => {
-    const token = jwt.sign({id: user._id}, process.env.JWT_SECRET,{
-        expiresIn:"1h"
-    })
-    console.log(token)
-    const options = {maxAge: 60 * 60 *  1000, httpOnly: true,sameSite: 'Strict'}
-   
-    res
-        .status(codeStatus)
-        .cookie('token', token, options)
-        .json({
-            success: true,
-            message:"logindan o'tdi",
-           
-            user: user,
-      
-        })
-}
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
+  console.log(token);
+  const options = {
+    maxAge: 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: "Strict",
+  };
 
-const userProfile = async (req,res,next)=>{
-    try {
-        const userp = await userModel.findById(req.user.id).select("-password")
-        if(!userp){
-            return next(new ErrorResponse("Foydalanuvchi topilmadi", 404))
-        }
-        res.status(200).json({
-            success: true,
-            userp
-        })
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({
-            success: false,
-            message: 'Serverda xatolik yuz berdi',
-            error: error.message,
-          });
-        
+  res.status(codeStatus).cookie("token", token, options).json({
+    success: true,
+    message: "logindan o'tdi",
+
+    user: user,
+  });
+};
+
+const userProfile = async (req, res, next) => {
+  try {
+    const userp = await userModel.findById(req.user.id).select("-password");
+    if (!userp) {
+      return next(new ErrorResponse("Foydalanuvchi topilmadi", 404));
     }
-   
-}
-
-const logOut = (req,res,next) =>{
-    res.clearCookie("token")
     res.status(200).json({
-        success: true,
-        message:"logout success"
-    })
-}
+      success: true,
+      userp,
+    });
+  } catch (error) {
+    console.log(error.message);
+    next(new ErrorResponse(error.message, 500));
+  }
+};
+
+const logOut = (req, res, next) => {
+  res.clearCookie("token");
+  res.status(200).json({
+    success: true,
+    message: "logout success",
+  });
+};
 // forgot password------------------------------------------------------------------------
 
 // OTP yaratish funksiyasi
-const generateOTP = () => {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-};
-  
+// const generateOTP = () => {
+//   return Math.floor(100000 + Math.random() * 900000).toString();
+// };
 
 // // Forgot Password - OTP yuborish
 // const forgotPassword =  async (req, res) => {
@@ -201,7 +178,4 @@ const generateOTP = () => {
 //   }
 // }
 
-
-
-
-module.exports = {signUp,signIn, logOut,userProfile}
+module.exports = { signUp, signIn, logOut, userProfile };
