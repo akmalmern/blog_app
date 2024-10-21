@@ -15,7 +15,7 @@ const signUp = async (req, res, next) => {
   }
   if (password.length < 4) {
     return next(
-      new ErrorResponse("kamida 4 ta belgidan iborat bolish kk", 400)
+      new ErrorResponse("Parol kamida 4 ta belgidan iborat bolish kk", 400)
     );
   }
 
@@ -55,34 +55,32 @@ const signIn = async (req, res, next) => {
     if (!isMatch) {
       return next(new ErrorResponse("parol xato"), 401);
     }
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+  
+    const options = {
+      maxAge: 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "Strict",
+    };
+  
+    res.status(200).cookie("token", token, options).json({
+      success: true,
+      message: "logindan o'tdi",
+      token: token
+  
+     
+    });
 
-    // token
-    sendTokenResponse(user, 200, res);
-    res.status();
+   
   } catch (error) {
     console.log(error.message);
     next(new ErrorResponse(error.message, 500));
   }
 };
 
-const sendTokenResponse = async (user, codeStatus, res) => {
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
-  });
-  console.log(token);
-  const options = {
-    maxAge: 60 * 60 * 1000,
-    httpOnly: true,
-    sameSite: "Strict",
-  };
 
-  res.status(codeStatus).cookie("token", token, options).json({
-    success: true,
-    message: "logindan o'tdi",
-
-    user: user,
-  });
-};
 
 const userProfile = async (req, res, next) => {
   try {
