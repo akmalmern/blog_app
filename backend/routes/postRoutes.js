@@ -15,8 +15,8 @@ const { isAuthenticated } = require("../middlware/isAuth");
 
 router.post("/addpost", isAuthenticated, upload.single("image"), addPost);
 router.get("/posts", getPost);
-router.get("/singlepost/:id", isAuthenticated, singlePost);
-router.put("/update/:id", upload.single("image"), updatePost);
+router.get("/singlepost/:id", singlePost);
+router.put("/update/:id",isAuthenticated, upload.single("image"), updatePost);
 router.put("/comment/post/:id", isAuthenticated, addComment);
 router.put("/like/post/:id", isAuthenticated, addLike);
 router.put("/like/post/delete/:id", isAuthenticated, removeLike);

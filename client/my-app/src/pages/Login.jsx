@@ -21,16 +21,18 @@ const Login = () => {
           {
             email,
             password,
-          }
+          },
+        
         );
   
 
   
         if (data.success === true) {
           toast.success(data.message);
-        //   localStorage.setItem("token", data.token);
+       
           localStorage.setItem("token", JSON.stringify(data.token));
-          navigate("/");
+   
+          navigate("/home");
        
         }
      
@@ -40,7 +42,6 @@ const Login = () => {
       }
     };
 
- 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
    

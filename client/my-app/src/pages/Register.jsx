@@ -9,7 +9,7 @@ const [name, setUserName] = useState("");
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
 const [confirmPassword, setConfirmPassword] = useState('');
- const [isPasswordMatch, setIsPasswordMatch] = useState(true);
+const [isPasswordMatch, setIsPasswordMatch] = useState(true);
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -26,7 +26,6 @@ const [confirmPassword, setConfirmPassword] = useState('');
       } else {
         setIsPasswordMatch(false);
       }
-     
     } catch (error) {
      
       toast.error(error.response.data.error)

@@ -12,6 +12,7 @@ router.post("/signup", signUp);
 router.post("/signin", signIn);
 router.get("/logout", logOut);
 router.get("/userprofile", isAuthenticated, userProfile);
+router.get("/private", isAuthenticated);
 // router.post("/forgot-password", forgotPassword)
 // router.post("/reset-password", resetPassword)
 

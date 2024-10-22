@@ -55,7 +55,7 @@ const signIn = async (req, res, next) => {
     if (!isMatch) {
       return next(new ErrorResponse("parol xato"), 401);
     }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user._id, }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
   
@@ -68,7 +68,9 @@ const signIn = async (req, res, next) => {
     res.status(200).cookie("token", token, options).json({
       success: true,
       message: "logindan o'tdi",
-      token: token
+      id: user._id,  // Foydalanuvchi ID'si
+      role: user.role,
+       token
   
      
     });
@@ -79,7 +81,10 @@ const signIn = async (req, res, next) => {
     next(new ErrorResponse(error.message, 500));
   }
 };
-
+// app.get('/api/user/role', authenticateToken, (req, res) => {
+//   const user = getUserById(req.user.id); // user ID dan rolni toping
+//   res.json({ role: user.role });
+// });
 
 
 const userProfile = async (req, res, next) => {
