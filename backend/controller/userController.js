@@ -55,27 +55,23 @@ const signIn = async (req, res, next) => {
     if (!isMatch) {
       return next(new ErrorResponse("parol xato"), 401);
     }
-    const token = jwt.sign({ id: user._id, }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-  
+
     const options = {
       maxAge: 60 * 60 * 1000,
       httpOnly: true,
       sameSite: "Strict",
     };
-  
+
     res.status(200).cookie("token", token, options).json({
       success: true,
       message: "logindan o'tdi",
-      id: user._id,  // Foydalanuvchi ID'si
+      id: user._id, // Foydalanuvchi ID'si
       role: user.role,
-       token
-  
-     
+      token,
     });
-
-   
   } catch (error) {
     console.log(error.message);
     next(new ErrorResponse(error.message, 500));
@@ -85,7 +81,6 @@ const signIn = async (req, res, next) => {
 //   const user = getUserById(req.user.id); // user ID dan rolni toping
 //   res.json({ role: user.role });
 // });
-
 
 const userProfile = async (req, res, next) => {
   try {

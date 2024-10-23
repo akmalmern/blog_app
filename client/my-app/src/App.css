@@ -1,17 +1,14 @@
 /* Ekran kengligi 768px yoki undan katta bo'lganda (md) */
 @media (max-width: 768px) {
-    .dropdovn1 {
-       display: none;
-    }
-    
-
-  
+  .dropdovn1 {
+    display: none;
+  }
 }
 @media (min-width: 768px) {
-    .dropdovn2 {
-       display: none;
-    }
-
-
-  
+  .dropdovn2 {
+    display: none;
+  }
+  .padd {
+    margin-top: 100px;
+  }
 }

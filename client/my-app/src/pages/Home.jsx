@@ -4,33 +4,28 @@ import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 import Blog from "./Blog";
 
+const Home = () => {
+  const navigate = useNavigate();
+  const logOut = () => {
+    axios
+      .get("http://localhost:5000/logout")
+      .then((result) => {
+        localStorage.removeItem("token");
 
+        toast.success(result.data.message);
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  return (
+    <>
+      <Navbar />
 
-const Home = ()=>{
-    const navigate = useNavigate()
-    const logOut = () => {
-        axios
-          .get("http://localhost:5000/logout")
-          .then((result) => {
-            localStorage.removeItem("token");
-       
-            toast.success(result.data.message);
-            navigate("/login");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      };
-    return(
-        <>
-        <Navbar/>
-      
-        <button className="btn " onClick={logOut}>Logout</button>
-      <Blog/>
-    
-        </>
-    )
-}
+      <Blog />
+    </>
+  );
+};
 
-
-export default Home
+export default Home;
