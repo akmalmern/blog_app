@@ -18,8 +18,8 @@ router.get("/posts", getPost);
 router.get("/singlepost/:id", singlePost);
 router.put("/update/:id",isAuthenticated, upload.single("image"), updatePost);
 router.put("/comment/post/:id", isAuthenticated, addComment);
-router.put("/like/post/:id", isAuthenticated, addLike);
-router.put("/like/post/delete/:id", isAuthenticated, removeLike);
+router.put("/like/post/:id",isAuthenticated, addLike);
+router.put("/like/post/delete/:id",isAuthenticated, removeLike);
 router.delete(
   "/delete/:id",
 

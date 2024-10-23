@@ -2,7 +2,7 @@ const postModel = require("../model/postModel");
 const ErrorResponse = require("../utils/errorResponse");
 const fs = require("fs");
 const path = require("path");
-
+const main = require('../server');
 const addPost = async (req, res, next) => {
   try {
     const { title, content, image, postedBy } = req.body;
@@ -224,7 +224,7 @@ const addLike = async (req, res, next) => {
       .find()
       .sort({ createdAt: -1 })
       .populate("postedBy", "name");
-    // main.io.emit("add-like", posts);
+    main.io.emit("add-like", posts);
 
     res.status(200).json({
       success: true,
@@ -251,7 +251,7 @@ const removeLike = async (req, res, next) => {
       .find()
       .sort({ createdAt: -1 })
       .populate("postedBy", "name");
-    // main.io.emit("remove-like", posts);
+    main.io.emit("remove-like", posts);
 
     res.status(200).json({
       success: true,

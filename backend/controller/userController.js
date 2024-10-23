@@ -55,28 +55,44 @@ const signIn = async (req, res, next) => {
     if (!isMatch) {
       return next(new ErrorResponse("parol xato"), 401);
     }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
 
-    const options = {
-      maxAge: 60 * 60 * 1000,
-      httpOnly: true,
-      sameSite: "Strict",
-    };
+    sendTokenResponse(user, 200, res);
+  
 
-    res.status(200).cookie("token", token, options).json({
-      success: true,
-      message: "logindan o'tdi",
-      id: user._id, // Foydalanuvchi ID'si
-      role: user.role,
-      token,
-    });
+    // const options = {
+    //   maxAge: 60 * 60 * 1000,
+    //   httpOnly: true,
+    //   sameSite: "Strict",
+    // };
+
+    // res.status(200).cookie("token", token, options).json({
+    //   success: true,
+    //   message: "logindan o'tdi",
+    //   id: user._id, // Foydalanuvchi ID'si
+    //   role: user.role,
+      
+    // });
   } catch (error) {
     console.log(error.message);
     next(new ErrorResponse(error.message, 500));
   }
 };
+const sendTokenResponse = async (user, codeStatus, res) => {
+  const token = await user.getJwtToken();
+  const options = { maxAge: 60 * 60 * 1000, httpOnly: true }
+ 
+  res
+      .status(codeStatus)
+      .cookie('token', token, options)
+      .json({
+          success: true,
+          id: user._id,
+          
+          role: user.role,
+         
+      })
+}
+
 // app.get('/api/user/role', authenticateToken, (req, res) => {
 //   const user = getUserById(req.user.id); // user ID dan rolni toping
 //   res.json({ role: user.role });

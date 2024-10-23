@@ -9,7 +9,13 @@ const path = require("path")
 // routes
 const userRouter = require("./routes/userRoutes")
 const blogRouter = require("./routes/postRoutes")
-
+// *************************************************
+//adding socket.io configuration
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+// **************************************************
 const errorHandler = require("./middlware/error")
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -29,9 +35,19 @@ app.use("/", blogRouter);
 
 // 
 app.use(errorHandler)
-
+// ***************************************
+io.on('connection', (socket) => {
+    //console.log('a user connected', socket.id);
+    socket.on('comment', (msg) => {
+      // console.log('new comment received', msg);
+      io.emit("new-comment", msg);
+    })
+  })
+  
+  exports.io = io
+  
 const port = process.env.PORT || 5000
-app.listen(port, ()=> {
+server.listen(port, ()=> {
     console.log(`${port}-portda ishladi`)
 })
 

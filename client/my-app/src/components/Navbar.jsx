@@ -108,9 +108,11 @@ const Navbar = () => {
         <span className="sr-only">Open user menu</span>
         <img
           className="w-8 h-8 me-2 rounded-full"
-          src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/..."
+         
+          src="../assets/user.png"
           alt="user photo"
         />
+  
         Bonnie Green
         <svg
           className="w-2.5 h-2.5 ms-3"
@@ -192,7 +194,7 @@ const Navbar = () => {
               <Link to="#" className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Home</Link>
             </li>
             <li>
-              <Link to="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">About</Link>
+              <Link to="/single" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Single</Link>
             </li>
             <li>
               <Link to="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Services</Link>
