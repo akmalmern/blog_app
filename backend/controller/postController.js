@@ -158,56 +158,80 @@ const deletPost = async (req, res, next) => {
   }
 };
 
-// comment  qoshish
-const mongoose = require("mongoose");
 
+
+//add comment
 const addComment = async (req, res, next) => {
-  const { comments } = req.body;
-
-  // 1. Validatsiya
-  if (
-    !comments ||
-    typeof comments !== "string" ||
-    comments.trim().length === 0
-  ) {
-    return next(
-      new ErrorResponse(
-        "Izoh bo'sh bo'lishi yoki noto'g'ri formatda bo'lishi mumkin emas.",
-        400
-      )
-    );
-  }
-
+  const { comment } = req.body;
   try {
-    // 2. Postni yangilash
-    const postComment = await postModel.findByIdAndUpdate(
-      req.params.id,
-      {
-        $push: { comments: { text: comments, postedBy: req.user._id } },
+      const postComment = await postModel.findByIdAndUpdate(req.params.id, {
+          $push: { comments: { text: comment, postedBy: req.user._id } }
       },
-      { new: true }
-    );
+          { new: true }
+      );
+      const post = await postModel.findById(postComment._id).populate('comments.postedBy', 'name email');
+      res.status(200).json({
+          success: true,
+          post
+      })
 
-    // Postni topmaslik holatini tekshirish
-    if (!postComment) {
-      return next(ErrorResponse("post topilmadi", 404));
-    }
-
-    // 3. Izohlar bilan postni qayta olish
-    const post = await postModel
-      .findById(postComment._id)
-      .populate("comments.postedBy", "name");
-
-    res.status(200).json({
-      success: true,
-      post,
-    });
   } catch (error) {
-    // 4. Xatolarni boshqarish
-    console.error(error); // Xatoni konsolga chiqarish
-    next(new ErrorResponse(error.message, 500));
+      next(error);
   }
-};
+
+}
+
+
+// // comment  qoshish
+// const mongoose = require("mongoose");
+
+// const addComment = async (req, res, next) => {
+//   const { comments } = req.body;
+
+//   // 1. Validatsiya
+//   if (
+//     !comments ||
+//     typeof comments !== "string" ||
+//     comments.trim().length === 0
+//   ) {
+//     return next(
+//       new ErrorResponse(
+//         "Izoh bo'sh bo'lishi yoki noto'g'ri formatda bo'lishi mumkin emas.",
+//         400
+//       )
+//     );
+//   }
+
+//   try {
+//     // 2. Postni yangilash
+//     const postComment = await postModel.findByIdAndUpdate(
+//       req.params.id,
+//       {
+//         $push: { comments: { text: comments, postedBy: req.user._id } },
+//       },
+//       { new: true }
+//     );
+
+//     // Postni topmaslik holatini tekshirish
+//     if (!postComment) {
+//       return next(ErrorResponse("post topilmadi", 404));
+//     }
+
+//     // 3. Izohlar bilan postni qayta olish
+//     const post = await postModel
+//       .findById(postComment._id)
+//       .populate("comments.postedBy", "name");
+
+//     res.status(200).json({
+//       success: true,
+//       post,
+//     });
+//   } catch (error) {
+//     // 4. Xatolarni boshqarish
+//     console.error(error); // Xatoni konsolga chiqarish
+//     next(new ErrorResponse(error.message, 500));
+//   }
+// };
 
 // add like qoshish
 

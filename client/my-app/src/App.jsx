@@ -9,7 +9,8 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import SinglePage from "./components/SinglePage";
 import Navbar from "./components/Navbar";
-
+import PrivateRoute from "./pages/PrivateRoute"
+import Footer from "./components/Footer";
 
 function App() {
 
@@ -22,16 +23,16 @@ function App() {
       {/* <Route path="/home" element={<Home/>} /> */}
       <Route path="/register" element={<Register/>} />
       <Route path="/" element={<Login/>} />
-      {/* <Route path="/home" element={<PrivateRoute>
+      <Route path="/home" element={<PrivateRoute>
         <Home/>
-      </PrivateRoute>} /> */}
+      </PrivateRoute>} />
       <Route path="/home" element={<Home/>} />
       <Route path="/login" element={<Login/>} />
       <Route path="/single/:id" element={<SinglePage/>} />
       <Route path="*" element={<NotFound/>} />
   
     </Routes>
-   
+   <Footer/>
     </>
   );
 }

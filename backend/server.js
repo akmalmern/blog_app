@@ -6,12 +6,12 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const DB = require("./db/db");
 const path = require("path");
+const http = require("http");
 // routes
 const userRouter = require("./routes/userRoutes");
 const blogRouter = require("./routes/postRoutes");
 // *************************************************
 //adding socket.io configuration
-const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
@@ -19,25 +19,22 @@ const io = new Server(server);
 const errorHandler = require("./middlware/error");
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++
-DB(); //mongodb
+DB(); 
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: "http://localhost:5173", // Frontend domenini kiriting
+    origin: "http://localhost:5173", 
 
-    credentials: true, // Cookie-larni qo'llab-quvvatlash
+    credentials: true, 
   })
 );
 app.use(cookieParser());
-
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
+// ***********************************************************************************************
 // routes
 app.use("/", userRouter);
 app.use("/", blogRouter);
-
-//
 app.use(errorHandler);
 // ***************************************
 io.on("connection", (socket) => {
