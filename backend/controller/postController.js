@@ -2,7 +2,7 @@ const postModel = require("../model/postModel");
 const ErrorResponse = require("../utils/errorResponse");
 const fs = require("fs");
 const path = require("path");
-const main = require('../server');
+const main = require("../server");
 const addPost = async (req, res, next) => {
   try {
     const { title, content, image, postedBy } = req.body;

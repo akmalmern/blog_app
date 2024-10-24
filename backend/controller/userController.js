@@ -57,7 +57,6 @@ const signIn = async (req, res, next) => {
     }
 
     sendTokenResponse(user, 200, res);
-  
 
     // const options = {
     //   maxAge: 60 * 60 * 1000,
@@ -70,7 +69,7 @@ const signIn = async (req, res, next) => {
     //   message: "logindan o'tdi",
     //   id: user._id, // Foydalanuvchi ID'si
     //   role: user.role,
-      
+
     // });
   } catch (error) {
     console.log(error.message);
@@ -79,19 +78,17 @@ const signIn = async (req, res, next) => {
 };
 const sendTokenResponse = async (user, codeStatus, res) => {
   const token = await user.getJwtToken();
-  const options = { maxAge: 60 * 60 * 1000, httpOnly: true }
- 
-  res
-      .status(codeStatus)
-      .cookie('token', token, options)
-      .json({
-          success: true,
-          id: user._id,
-          
-          role: user.role,
-         
-      })
-}
+  console.log("dddd" + token);
+  const options = { maxAge: 60 * 60 * 1000, httpOnly: true };
+
+  res.status(codeStatus).cookie("token", token, options).json({
+    success: true,
+    id: user._id,
+
+    role: user.role,
+    token,
+  });
+};
 
 // app.get('/api/user/role', authenticateToken, (req, res) => {
 //   const user = getUserById(req.user.id); // user ID dan rolni toping
