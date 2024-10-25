@@ -79,7 +79,7 @@ const signIn = async (req, res, next) => {
 const sendTokenResponse = async (user, codeStatus, res) => {
   const token = await user.getJwtToken();
   console.log("dddd" + token);
-  const options = { maxAge: 60 *  1000, httpOnly: true };
+  const options = { maxAge: 10 * 1000, httpOnly: true };
 
   res.status(codeStatus).cookie("token", token, options).json({
     success: true,

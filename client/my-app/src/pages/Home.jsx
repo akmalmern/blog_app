@@ -1,13 +1,13 @@
+import Blog from "./Blog";
 
-import Blog from "./Blog"
+const Home = () => {
+  // Axiosda interceptor yaratamiz
 
-
-const Home =()=>{
-  return(
+  return (
     <>
-    <Blog/>
+      <Blog />
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

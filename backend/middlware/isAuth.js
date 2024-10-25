@@ -3,10 +3,10 @@ const jwt = require("jsonwebtoken");
 const userModel = require("../model/userModel");
 
 const isAuthenticated = async (req, res, next) => {
-  const {token} = req.cookies  
-  console.log("akmal" + +"  " + token)
+  const { token } = req.cookies;
   if (!token) {
     return next(new ErrorResponse("Login dan o'tishingiz kerak 00", 401));
+    redirect("/login");
   }
 
   try {
@@ -15,7 +15,7 @@ const isAuthenticated = async (req, res, next) => {
     if (!req.user) {
       return next(new ErrorResponse("Foydalanuvchi topilmadi", 404));
     }
-   
+
     next();
   } catch (error) {
     return next(new ErrorResponse("Logindan o'tishingiz kerak 09212", 401));
