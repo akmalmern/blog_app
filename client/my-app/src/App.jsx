@@ -29,6 +29,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/single/:id" element={<SinglePage />} />
         <Route path="*" element={<NotFound />} />

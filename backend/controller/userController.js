@@ -57,29 +57,14 @@ const signIn = async (req, res, next) => {
     }
 
     sendTokenResponse(user, 200, res);
-
-    // const options = {
-    //   maxAge: 60 * 60 * 1000,
-    //   httpOnly: true,
-    //   sameSite: "Strict",
-    // };
-
-    // res.status(200).cookie("token", token, options).json({
-    //   success: true,
-    //   message: "logindan o'tdi",
-    //   id: user._id, // Foydalanuvchi ID'si
-    //   role: user.role,
-
-    // });
   } catch (error) {
-    console.log(error.message);
     next(new ErrorResponse(error.message, 500));
   }
 };
 const sendTokenResponse = async (user, codeStatus, res) => {
   const token = await user.getJwtToken();
   console.log("dddd" + token);
-  const options = { maxAge: 10 * 1000, httpOnly: true };
+  const options = { maxAge: 60 * 60 * 60 * 1000, httpOnly: true };
 
   res.status(codeStatus).cookie("token", token, options).json({
     success: true,
@@ -89,11 +74,6 @@ const sendTokenResponse = async (user, codeStatus, res) => {
     token,
   });
 };
-
-// app.get('/api/user/role', authenticateToken, (req, res) => {
-//   const user = getUserById(req.user.id); // user ID dan rolni toping
-//   res.json({ role: user.role });
-// });
 
 const userProfile = async (req, res, next) => {
   try {
