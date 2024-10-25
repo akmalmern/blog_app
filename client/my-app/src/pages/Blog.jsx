@@ -25,6 +25,7 @@ const Blog = ()=> {
     useEffect(() => {
       showPosts();
     }, []);
+    
   
     useEffect(() => {
       socket.on("add-like", (newPosts) => {
@@ -43,7 +44,6 @@ const Blog = ()=> {
         : postRemoveLike.length > 0
         ? postRemoveLike
         : posts;
-  console.log(uiPosts)
     return(
         <>
         <div className="max-w-screen-xl mx-auto p-5 sm:p-10 md:p-16">

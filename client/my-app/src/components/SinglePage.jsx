@@ -69,13 +69,11 @@ useEffect(() => {
     } catch (error) {
       if (error.response) {
         // So'rov muvaffaqiyatsiz bo'ldi, va serverdan javob olindi
-        console.log("Error data:", error.response.data.error);
-        console.log("Error status:", error.response.status);
-        console.log("Error headers:", error.response.headers);}
+   
         console.log(error);
         toast.error(error.response.data.error);
     }
-}
+}}
 
 let uiCommentUpdate = commentsRealTime.length > 0 ? commentsRealTime : comments;
 
@@ -148,10 +146,9 @@ userInfo ? (<div>
       <footer className="flex justify-between items-center mb-2">
           <div className="flex items-center">
               <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold">
-                  <img
-                      className="mr-2 w-6 h-6 rounded-full"
-                      src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-                      alt="Michael Gough"/>
+              <div className="relative w-6 h-6 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+    <svg className="absolute w-8 h-8 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
+</div>
                       {comment.postedBy.name}</p>
               <p className="text-sm text-gray-600 dark:text-gray-400"><time  dateTime="2022-02-08"
                       title="February 8th, 2022">Feb. 8, 2022</time></p>
@@ -173,7 +170,6 @@ userInfo ? (<div>
         </div>
         </>
     )
-}
-
+  }
 
 export default SinglePage

@@ -10,11 +10,13 @@ const {
   addComment,
   addLike,
   removeLike,
+  getUserPosts,
 } = require("../controller/postController");
 const { isAuthenticated } = require("../middlware/isAuth");
 
 router.post("/addpost", isAuthenticated, upload.single("image"), addPost);
 router.get("/posts", getPost);
+router.get("/my-posts",isAuthenticated, getUserPosts)
 router.get("/singlepost/:id", singlePost);
 router.put("/update/:id",isAuthenticated, upload.single("image"), updatePost);
 router.put("/comment/post/:id", isAuthenticated, addComment);

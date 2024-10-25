@@ -10,7 +10,7 @@ import Login from "./pages/Login";
 import SinglePage from "./components/SinglePage";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./pages/PrivateRoute"
-import Footer from "./components/Footer";
+import UserProfile from "./pages/user-profile/UserProfile";
 
 function App() {
 
@@ -26,13 +26,16 @@ function App() {
       <Route path="/home" element={<PrivateRoute>
         <Home/>
       </PrivateRoute>} />
+      <Route path="/profile" element={<PrivateRoute>
+        <UserProfile/>
+      </PrivateRoute>} />
       <Route path="/home" element={<Home/>} />
       <Route path="/login" element={<Login/>} />
       <Route path="/single/:id" element={<SinglePage/>} />
       <Route path="*" element={<NotFound/>} />
   
     </Routes>
-   <Footer/>
+
     </>
   );
 }

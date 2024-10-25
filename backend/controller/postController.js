@@ -43,6 +43,30 @@ const getPost = async (req, res, next) => {
     next(new ErrorResponse(error.message, 500));
   }
 };
+const getUserPosts = async (req, res, next) => {
+  try {
+    const userId = req.user.id; // Foydalanuvchining ID-sini olish
+    const userPosts = await postModel
+      .find({ postedBy: userId }) // Foydalanuvchi joylagan postlarni qidirish
+      .sort({ createdAt: -1 }) // Eng yangi postlar yuqorida
+      .populate("postedBy", "name");
+
+    if (!userPosts || userPosts.length === 0) {
+      return next(new ErrorResponse("Siz joylagan postlar topilmadi", 404));
+    }
+
+    res.status(200).send({
+      success: true,
+      message: "Siz joylagan postlar",
+      total_posts: userPosts.length + " ta",
+      myposts: userPosts,
+    });
+  } catch (error) {
+    console.log(error.message);
+    next(new ErrorResponse(error.message, 500));
+  }
+};
+
 
 const singlePost = async (req, res, next) => {
   try {
@@ -288,6 +312,7 @@ const removeLike = async (req, res, next) => {
 module.exports = {
   addPost,
   getPost,
+  getUserPosts,
   updatePost,
   deletPost,
   singlePost,
