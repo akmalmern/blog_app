@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import PostCard from "../../components/PostCard";
 import { Link } from "react-router-dom";
 
 
@@ -9,7 +8,6 @@ const UserProfile = () =>{
     // *************************************************
 
     const [myposts, setMyPosts] = useState([])
-console.log(myposts)
     const [title,setTitle] = useState("")
     const [content,setContent] = useState("")
     const [image,setImage] = useState(null)
@@ -57,6 +55,24 @@ console.log(myposts)
       MyPosts()
   
     },[])
+   //  *****************************************
+       //delete post by Id
+       const deletePostById = async ( id) => {
+         if (window.confirm("Are you sure you want to delete this post?")) {
+             try {
+                 const { data } = await axios.delete(`http://localhost:5000/delete/${id}`,{withCredentials:true});
+                 if (data.success === true) {
+                     toast.success(data.message);
+                     MyPosts();
+                 }
+             } catch (error) {
+                 console.log(error);
+                 toast.error(error);
+             }
+         }
+     }
+ 
+ 
 
     return(
         <>
@@ -257,12 +273,18 @@ console.log(myposts)
                   className="hover:bg-transparent transition duration-300 absolute bottom-0 top-0 right-0 left-0 bg-gray-900 opacity-25">
               </div>
          
-          <Link >
+       
               <div
+              onClick={() => deletePostById(post._id)}
                   className="text-xs absolute top-0 right-0 bg-red-600 px-4 py-2 text-white mt-3 mr-3 hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out">
                   Delete Post
               </div>
-          </Link>
+              <Link to={`/edit/${post._id}`}
+             
+                  className="text-xs absolute top-0  bg-red-600 px-4 py-2 text-white mt-3 mr-3 hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out">
+                  Edit Post
+              </Link>
+        
       </div>
       <div className="px-6 py-4 mb-auto">
           <a href="#"

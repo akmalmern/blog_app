@@ -11,6 +11,7 @@ import SinglePage from "./components/SinglePage";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./pages/PrivateRoute"
 import UserProfile from "./pages/user-profile/UserProfile";
+import EditBlog from "./pages/EditBlog";
 
 function App() {
 
@@ -31,9 +32,10 @@ function App() {
       </PrivateRoute>} />
       <Route path="/home" element={<Home/>} />
       <Route path="/login" element={<Login/>} />
+      <Route path = "/edit/:id" element={<EditBlog/>}/>
       <Route path="/single/:id" element={<SinglePage/>} />
       <Route path="*" element={<NotFound/>} />
-  
+   
     </Routes>
 
     </>
