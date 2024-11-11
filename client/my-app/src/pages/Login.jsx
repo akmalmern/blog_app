@@ -23,8 +23,6 @@ const Login = () => {
         }
       );
 
-      console.log(data);
-
       if (data.success === true) {
         toast.success(data.message);
         localStorage.setItem("userInfo", JSON.stringify(data));

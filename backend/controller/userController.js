@@ -57,14 +57,14 @@ const signIn = async (req, res, next) => {
     }
 
     sendTokenResponse(user, 200, res);
-
   } catch (error) {
     next(new ErrorResponse(error.message, 500));
   }
 };
 const sendTokenResponse = async (user, codeStatus, res) => {
   const token = await user.getJwtToken();
-  const options = { maxAge: 60 *60*  1000, httpOnly: true };
+  console.log("dddd" + token);
+  const options = { maxAge: 60 * 60 * 60 * 1000, httpOnly: true };
 
   res.status(codeStatus).cookie("token", token, options).json({
     success: true,
@@ -74,7 +74,6 @@ const sendTokenResponse = async (user, codeStatus, res) => {
     token,
   });
 };
-
 
 const userProfile = async (req, res, next) => {
   try {

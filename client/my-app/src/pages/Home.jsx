@@ -1,17 +1,11 @@
+import Blog from "./Blog";
 
-import Blog from "./Blog"
-
-
-const Home =()=>{
-  
-
-
-  return(
+const Home = () => {
+  return (
     <>
-   
-    <Blog/>
+      <Blog />
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
