@@ -11,6 +11,7 @@ import SinglePage from "./components/SinglePage";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./pages/PrivateRoute";
 import Footer from "./components/Footer";
+import UserProfile from "./pages/user-profile/UserProfile";
 
 function App() {
   return (
@@ -26,6 +27,14 @@ function App() {
           element={
             <PrivateRoute>
               <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/my-profile"
+          element={
+            <PrivateRoute>
+              <UserProfile />
             </PrivateRoute>
           }
         />
